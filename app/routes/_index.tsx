@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Editable, Slate } from "slate-react";
-import { useSlateEditor } from "~/components/slateEditor";
+import { useSlateEditor, type CustomElement } from "~/components/slateEditor";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,7 +16,7 @@ export default function Index() {
       type: "paragraph",
       children: [{ text: "A line of text in a paragraph." }],
     },
-  ];
+  ] satisfies CustomElement[];
 
   return (
     <Slate editor={editor} initialValue={initialValue}>

@@ -5,7 +5,7 @@ import { withReact } from "slate-react";
 import type { BaseEditor, Descendant } from "slate";
 import type { ReactEditor } from "slate-react";
 
-type CustomElement = { type: "paragraph"; children: CustomText[] };
+export type CustomElement = { type: "paragraph"; children: CustomText[] };
 type CustomText = { text: string };
 
 declare module "slate" {
