@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Editable, Slate } from "slate-react";
+import { useSlateEditor } from "~/components/slateEditor";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,34 +10,17 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const editor = useSlateEditor();
+  const initialValue = [
+    {
+      type: "paragraph",
+      children: [{ text: "A line of text in a paragraph." }],
+    },
+  ];
+
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <Slate editor={editor} initialValue={initialValue}>
+      <Editable readOnly={true} />
+    </Slate>
   );
 }
