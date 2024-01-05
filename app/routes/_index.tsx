@@ -20,7 +20,7 @@ export default function Index() {
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
-      <Editable readOnly={true} />
+      <Editable />
     </Slate>
   );
 }
