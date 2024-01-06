@@ -1,5 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Editor, Transforms, Element } from "slate";
 import { Editable, Slate } from "slate-react";
+import { useRenderElement } from "~/components/renderElement";
 import { useSlateEditor, type CustomElement } from "~/components/slateEditor";
 
 export const meta: MetaFunction = () => {
@@ -11,23 +13,79 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const editor = useSlateEditor();
+  const renderElement = useRenderElement();
   const initialValue = [
     {
       type: "paragraph",
       children: [{ text: "A line of text in a paragraph." }],
     },
-  ] satisfies CustomElement[];
+  ];
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
       <Editable
+        renderElement={renderElement}
         onKeyDown={(event) => {
-          if (event.key === "&") {
+          if (event.key === "`" && event.ctrlKey) {
             event.preventDefault();
-            editor.insertText("and");
+            // Determine whether any of the currently selected blocks are code blocks.
+            const [match] = Editor.nodes(editor, {
+              match: (n) => n.type === "code",
+            });
+            // Toggle the block type depending on whether there's already a match.
+            Transforms.setNodes(
+              editor,
+              { type: match ? "paragraph" : "code" },
+              {
+                match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
+              }
+            );
           }
         }}
       />
     </Slate>
   );
 }
+
+// const initialValue = [
+//   {
+//     type: 'paragraph',
+//     children: [{ text: 'A line of text in a paragraph.' }],
+//   },
+// ]
+
+// const App = () => {
+//   const [editor] = useState(() => withReact(createEditor()))
+
+//   const renderElement = useCallback(props => {
+//     switch (props.element.type) {
+//       case 'code':
+//         return <CodeElement {...props} />
+//       default:
+//         return <DefaultElement {...props} />
+//     }
+//   }, [])
+
+//   return (
+//     <Slate editor={editor} initialValue={initialValue}>
+//       <Editable
+//         renderElement={renderElement}
+//         onKeyDown={event => {
+//           if (event.key === '`' && event.ctrlKey) {
+//             event.preventDefault()
+//             // Determine whether any of the currently selected blocks are code blocks.
+//             const [match] = Editor.nodes(editor, {
+//               match: n => n.type === 'code',
+//             })
+//             // Toggle the block type depending on whether there's already a match.
+//             Transforms.setNodes(
+//               editor,
+//               { type: match ? 'paragraph' : 'code' },
+//               { match: n => Element.isElement(n) && Editor.isBlock(editor, n) }
+//             )
+//           }
+//         }}
+//       />
+//     </Slate>
+//   )
+// }
