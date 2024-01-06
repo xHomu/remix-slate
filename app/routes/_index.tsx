@@ -28,11 +28,11 @@ export default function Index() {
         onKeyDown={(event) => {
           if (event.key === "`" && event.ctrlKey) {
             event.preventDefault();
-            // Determine whether any of the currently selected blocks are code blocks.
+
             const [match] = Editor.nodes(editor, {
               match: (n) => n.type === "code",
             });
-            // Toggle the block type depending on whether there's already a match.
+
             Transforms.setNodes(
               editor,
               { type: match ? "paragraph" : "code" },
@@ -46,4 +46,3 @@ export default function Index() {
     </Slate>
   );
 }
-//             // Determine whether any of the currently selected blocks are code blocks.
