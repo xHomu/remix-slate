@@ -20,7 +20,14 @@ export default function Index() {
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
-      <Editable />
+      <Editable
+        onKeyDown={(event) => {
+          if (event.key === "&") {
+            event.preventDefault();
+            editor.insertText("and");
+          }
+        }}
+      />
     </Slate>
   );
 }
