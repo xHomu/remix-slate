@@ -14,20 +14,35 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+let initialValue = [
+  {
+    type: "paragraph",
+    children: [{ text: "A line of text in a paragraph." }],
+  },
+];
+
 export default function Index() {
   const editor = useSlateEditor();
   const renderElement = useRenderElement();
   const renderLeaf = useRenderLeaf();
 
-  const initialValue = [
-    {
-      type: "paragraph",
-      children: [{ text: "A line of text in a paragraph." }],
-    },
-  ];
-
   return (
-    <Slate editor={editor} initialValue={initialValue}>
+    <Slate
+      editor={editor}
+      initialValue={initialValue}
+      onChange={(value) => {
+        const isAstChange = editor.operations.some(
+          (op) => "set_selection" !== op.type
+        );
+        if (isAstChange) {
+          // console.log(value));
+          // Save the value to Local Storage.
+          initialValue = JSON.parse(JSON.stringify(value));
+          console.log(initialValue);
+          // console.log(initialValue);
+        }
+      }}
+    >
       <Toolbar editor={editor} />
       <Editable
         renderElement={renderElement}
