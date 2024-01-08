@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Editor, Transforms, Element } from "slate";
 import { Editable, Slate } from "slate-react";
+import { CustomEditor } from "~/components/CustomEditor";
 import { useRenderElement } from "~/components/renderElement";
 import { useRenderLeaf } from "~/components/renderLeaf";
 import { useSlateEditor, type CustomElement } from "~/components/slateEditor";
@@ -37,25 +38,12 @@ export default function Index() {
           switch (event.key) {
             case "`": {
               event.preventDefault();
-              // Determine whether any of the currently selected blocks are code blocks.
-              const [match] = Editor.nodes(editor, {
-                match: (n) => n.type === "code",
-              });
-              // Toggle the block type depending on whether there's already a match.
-              Transforms.setNodes(
-                editor,
-                { type: match ? "paragraph" : "code" },
-                {
-                  match: (n) =>
-                    Element.isElement(n) && Editor.isBlock(editor, n),
-                }
-              );
-
+              CustomEditor.toggleCodeBlock(editor);
               break;
             }
             case "b": {
               event.preventDefault();
-              Editor.addMark(editor, "bold", true);
+              CustomEditor.toggleBoldMark(editor);
               break;
             }
           }
